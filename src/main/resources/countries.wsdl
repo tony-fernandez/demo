@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<wsdl:definitions name="Countries"
+	targetNamespace="http://demo.com/services/countries"
+	xmlns:tns="http://demo.com/services/countries"
+	xmlns:types="http://demo.com/types/countries"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://demo.com/services/countries"
+			targetNamespace="http://demo.com/services/countries"
+			elementFormDefault="qualified">
+			<xs:complexType name="country">
+				<xs:sequence>
+					<xs:element name="name" type="xs:string" />
+					<xs:element name="population" type="xs:int" />
+					<xs:element name="capital" type="xs:string" />
+					<xs:element name="currency" type="tns:currency" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:simpleType name="currency">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="GBP" />
+					<xs:enumeration value="EUR" />
+					<xs:enumeration value="PLN" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+	</wsdl:types>
+
+	<wsdl:message name="getCountryRequest">
+		<wsdl:part name="person" element="xs:string" />
+	</wsdl:message>
+
+	<wsdl:message name="getCountryResponse">
+		<wsdl:part name="country" element="tns:country" />
+	</wsdl:message>
+
+	<wsdl:portType name="Countries_PortType">
+		<wsdl:operation name="getCountry">
+			<wsdl:input message="tns:getCountryRequest" />
+			<wsdl:output message="tns:getCountryResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="Countries_SoapBinding"
+		type="tns:Countries_PortType">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getCountry">
+			<soap:operation
+				soapAction="http://demo.com/services/countries/getCountry" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="Countries_Service">
+		<wsdl:documentation>Hello World service</wsdl:documentation>
+		<wsdl:port name="Countries_Port"
+			binding="tns:Countries_SoapBinding">
+			<soap:address
+				location="http://demo.com/services/countries" />
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>
